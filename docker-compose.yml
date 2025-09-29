@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: nsxt-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:3001
+      - NEXT_PUBLIC_APP_NAME="Rail Route API Tester"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: nest-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - FRONTEND_URL=http://frontend:80
+      - ROUTES_FILE_PATH=/app/routes.txt  # Update path based on your backend Dockerfile
